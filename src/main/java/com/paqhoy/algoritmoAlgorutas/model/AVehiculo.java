@@ -19,5 +19,5 @@ public class AVehiculo {
     private String tipo;
     private Integer capacidad;
     private Double velocidad;
-    private Double costo_km;
+    private Double peso;
 }

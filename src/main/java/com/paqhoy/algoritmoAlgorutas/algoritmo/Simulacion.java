@@ -2,8 +2,6 @@ package com.paqhoy.algoritmoAlgorutas.algoritmo;
 
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.CollectionReference;
-import com.google.cloud.firestore.QueryDocumentSnapshot;
-import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.WriteResult;
 import com.paqhoy.algoritmoAlgorutas.algoritmo.dijkstra.Dijkstra;
 import com.paqhoy.algoritmoAlgorutas.algoritmo.kmeans.Kmeans;
@@ -16,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.time.LocalDateTime;
-import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -545,7 +542,7 @@ public class Simulacion {
         for(int i=0; i<cantClusterMotos;i++){
             AVehiculo vehiculo = new AVehiculo();
             vehiculo.setCapacidad(4);
-            vehiculo.setCosto_km(3.0);
+            vehiculo.setPeso(3.0);
             vehiculo.setVelocidad(60.00);
             vehiculo.setTipo_id(2);
             lista.add(vehiculo);
@@ -553,7 +550,7 @@ public class Simulacion {
         for(int i=0; i<cantClusterAutos;i++){
             AVehiculo vehiculo = new AVehiculo();
             vehiculo.setCapacidad(25);
-            vehiculo.setCosto_km(5.0);
+            vehiculo.setPeso(5.0);
             vehiculo.setVelocidad(30.00);
             vehiculo.setTipo_id(1);
             lista.add(vehiculo);

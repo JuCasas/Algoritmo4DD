@@ -30,8 +30,10 @@ public class Algoritmo {
     public List<APedido> listaPedidos;
     public List<Usuario> listaChoferesMoto;
     public List<Usuario> listaChoferesAuto;
-    public List<AVehiculo> listaMotos;
-    public List<AVehiculo> listaAutos;
+    public List<AVehiculo> listaVehiculoTipo1;
+    public List<AVehiculo> listaVehiculoTipo2;
+    public List<AVehiculo> listaVehiculoTipo3;
+    public List<AVehiculo> listaVehiculoTipo4;
     public List<Cluster> clusterResult;
     public List<CallesBloqueadas> listaCallesBloqueadas;
     public List<Ruta> listaRutas;
@@ -60,15 +62,64 @@ public class Algoritmo {
 
     @PersistenceUnit
     private EntityManagerFactory entityManagerFactory;
-    
+
     public String inicializar(){
-        listaChoferesAuto = usuarioService.getConductoresAutoDisponibles();
-        listaChoferesMoto = usuarioService.getConductoresMotoDisponibles();
-        listaMotos = vehiculoService.getMotosDisponibles();
-        listaAutos = vehiculoService.getAutosDisponibles();
+        //TODO POR BORRAR
+//        listaChoferesAuto = usuarioService.getConductoresAutoDisponibles();
+//        listaChoferesMoto = usuarioService.getConductoresMotoDisponibles();
+
+        listaVehiculoTipo1 = new ArrayList<>();
+
+        for (int i = 0; i < 2; i++) {
+            AVehiculo vehiculo = new AVehiculo();
+            vehiculo.setTipo("Tipo TA");
+            vehiculo.setTipo_id(1);
+            vehiculo.setCapacidad(25);
+            vehiculo.setPeso(2.5);
+            vehiculo.setVelocidad(50.00);
+            listaVehiculoTipo1.add(vehiculo);
+        }
+
+        listaVehiculoTipo2 = new ArrayList<>();
+
+        for (int i = 0; i < 4; i++) {
+            AVehiculo vehiculo = new AVehiculo();
+            vehiculo.setTipo("Tipo TB");
+            vehiculo.setTipo_id(2);
+            vehiculo.setCapacidad(20);
+            vehiculo.setPeso(2.0);
+            vehiculo.setVelocidad(50.00);
+            listaVehiculoTipo2.add(vehiculo);
+        }
+
+        listaVehiculoTipo3 = new ArrayList<>();
+
+        for (int i = 0; i < 4; i++) {
+            AVehiculo vehiculo = new AVehiculo();
+            vehiculo.setTipo("Tipo TC");
+            vehiculo.setTipo_id(3);
+            vehiculo.setCapacidad(15);
+            vehiculo.setPeso(1.5);
+            vehiculo.setVelocidad(50.00);
+            listaVehiculoTipo3.add(vehiculo);
+        }
+
+        listaVehiculoTipo4 = new ArrayList<>();
+
+        for (int i = 0; i < 10; i++) {
+            AVehiculo vehiculo = new AVehiculo();
+            vehiculo.setTipo("Tipo TD");
+            vehiculo.setTipo_id(4);
+            vehiculo.setCapacidad(10);
+            vehiculo.setPeso(1.0);
+            vehiculo.setVelocidad(50.00);
+            listaVehiculoTipo4.add(vehiculo);
+        }
+
         listaPedidos = obtenerListaPedidos();
-        if(listaChoferesMoto.size() == 0 && listaChoferesAuto.size() == 0) return "No hay conductores disponibles para las rutas";
-        if(listaAutos.size() == 0 && listaMotos.size() == 0) return "No hay vehículos disponibles para las rutas";
+
+//        if(listaChoferesMoto.size() == 0 && listaChoferesAuto.size() == 0) return "No hay conductores disponibles para las rutas";
+        if(listaVehiculoTipo2.size() == 0 && listaVehiculoTipo1.size() == 0) return "No hay vehículos disponibles para las rutas";
         if(listaPedidos.size() == 0) return "No hay pedidos en cola";
         obtenerCantidadClusters();
         kmeans = new Kmeans(cantMotos, cantAutos);
@@ -105,9 +156,9 @@ public class Algoritmo {
     }
 
     public void obtenerCantidadClusters(){
-        cantMotos = Math.min(listaMotos.size(), listaChoferesMoto.size());
-        cantAutos = Math.min(listaAutos.size(), listaChoferesAuto.size());
-        System.out.println(listaMotos.size() + " " + listaAutos.size());
+        cantMotos = listaVehiculoTipo1.size();
+        cantAutos = listaVehiculoTipo2.size();
+        System.out.println(listaVehiculoTipo1.size() + " " + listaVehiculoTipo2.size());
         System.out.println(listaChoferesMoto.size() + " " + listaChoferesAuto.size());
         //TODO  A: 2.5Tn B: 2Tn C: 1.5Tn  D: 1Tn
         int k = (int) (0.9 * (cantidadProductos / ( cantMotos * 4 + cantAutos * 25 )));
@@ -153,7 +204,7 @@ public class Algoritmo {
             AVehiculo vehiculo = new AVehiculo();
             vehiculo.setTipo("Moto");
             vehiculo.setCapacidad(4);
-            vehiculo.setCosto_km(3.0);
+            vehiculo.setPeso(3.0);
             vehiculo.setVelocidad(60.00);
             vehiculo.setTipo_id(2);
             lista.add(vehiculo);
@@ -162,7 +213,7 @@ public class Algoritmo {
             AVehiculo vehiculo = new AVehiculo();
             vehiculo.setTipo("Auto");
             vehiculo.setCapacidad(25);
-            vehiculo.setCosto_km(5.0);
+            vehiculo.setPeso(5.0);
             vehiculo.setVelocidad(30.00);
             vehiculo.setTipo_id(1);
             lista.add(vehiculo);
@@ -379,7 +430,7 @@ public class Algoritmo {
             }
             if(minCont == -1) break;
             listaRutas.get(minCont).chofer = chofer;
-            listaRutas.get(minCont).vehiculo = listaAutos.get(contadorAutos);
+            listaRutas.get(minCont).vehiculo = listaVehiculoTipo2.get(contadorAutos);
             log.info("MinCont: " + minCont);
             log.info("Auto: " + listaRutas.get(minCont).chofer);
             contadorAutos++;
@@ -400,7 +451,7 @@ public class Algoritmo {
             }
             if(minCont == -1) break;
             listaRutas.get(minCont).chofer = chofer;
-            listaRutas.get(minCont).vehiculo = listaMotos.get(contadorMotos);
+            listaRutas.get(minCont).vehiculo = listaVehiculoTipo1.get(contadorMotos);
             log.info("MinCont: " + minCont);
             log.info("Auto: " + listaRutas.get(minCont).chofer);
             contadorMotos++;

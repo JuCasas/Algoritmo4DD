@@ -1,9 +1,7 @@
 package com.paqhoy.algoritmoAlgorutas.service;
 
 import com.paqhoy.algoritmoAlgorutas.algoritmo.Algoritmo;
-import com.paqhoy.algoritmoAlgorutas.model.APedido;
 import com.paqhoy.algoritmoAlgorutas.model.Configuraciones;
-import com.paqhoy.algoritmoAlgorutas.model.Ruta;
 import com.paqhoy.algoritmoAlgorutas.model.UbicacionAlmacen;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 @Service
 @Slf4j
@@ -36,12 +33,12 @@ public class AlgoritmoService {
 
     public ArrayList getListaAutos(){
         algoritmo.inicializar();
-        return (ArrayList) algoritmo.listaAutos;
+        return (ArrayList) algoritmo.listaVehiculoTipo2;
     }
 
     public ArrayList getListaMotos(){
         algoritmo.inicializar();
-        return (ArrayList) algoritmo.listaMotos;
+        return (ArrayList) algoritmo.listaVehiculoTipo1;
     }
 
     public ArrayList getListaChoferesMoto(){
