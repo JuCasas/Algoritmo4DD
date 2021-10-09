@@ -18,6 +18,7 @@ public class Kmeans {
     public Integer cantAutos;
 
     public Kmeans(Integer cantMotos, Integer cantAutos){
+        //TODO CAMBIAR ESTO
         this.cantAutos = cantAutos;
         this.cantMotos = cantMotos;
     }
@@ -65,6 +66,7 @@ public class Kmeans {
 
     private double calculateTotalSSE (List<Cluster>  clusters){
 
+        //TODO REVISAR Y MODIFICAR
         double totalsse = 0;
         int totalMotos = 0;
         int totalAutos = 0;

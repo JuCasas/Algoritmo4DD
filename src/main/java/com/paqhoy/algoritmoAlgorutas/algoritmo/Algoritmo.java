@@ -109,6 +109,7 @@ public class Algoritmo {
         cantAutos = Math.min(listaAutos.size(), listaChoferesAuto.size());
         System.out.println(listaMotos.size() + " " + listaAutos.size());
         System.out.println(listaChoferesMoto.size() + " " + listaChoferesAuto.size());
+        //TODO  A: 2.5Tn B: 2Tn C: 1.5Tn  D: 1Tn
         int k = (int) (0.9 * (cantidadProductos / ( cantMotos * 4 + cantAutos * 25 )));
         if(k > 10) k = 10;
         if(k < 3) k = 3;
@@ -173,6 +174,7 @@ public class Algoritmo {
         List<Cluster> lista = new ArrayList<Cluster>();
         for(AVehiculo vehiculo: vehiculos){
             Cluster cluster =  new Cluster();
+            //TODO ENTENDER ESTA COSA
             cluster.pedidos = new PriorityQueue<APedido>(500,
                     new Comparator<APedido>(){
                         //override compare method
@@ -404,38 +406,38 @@ public class Algoritmo {
             contadorMotos++;
         }
 
-        for(int i=listaRutas.size()-1; i>=0; i--){
-            if(listaRutas.get(i).chofer == null) listaRutas.remove(i);
-            else {
-                Ruta ruta = listaRutas.get(i);
-                AlgoRuta algoRuta = new AlgoRuta();
-                algoRuta.setInicio(LocalDateTime.now());
-                algoRuta.setDistancia(0.0);
-                algoRuta.setCosto(0.0);
-                algoRuta.setUsuario_id(ruta.chofer.getId());
-                algoRuta.setVehiculo_id(ruta.vehiculo.getId());
-                algoRuta.setEstado_id(2);
-                algoritmoRepository.save(algoRuta);
-                usuarioRepository.cambiarEstadoUsuario(algoRuta.getUsuario_id());
-                algoritmoRepository.cambiarEstadoVehiculo(algoRuta.getVehiculo_id());
-                int orden = 1;
-                for(APedido pedido: ruta.pedidos){
-                    algoritmoRepository.cambiarEstadoPedido(pedido.id);
-                    algoritmoRepository.insertarPedidoRuta(algoRuta.getId(), pedido.id, orden);
-                    orden++;
-                }
-                orden = 1;
-                for(int nodo: ruta.recorrido){
-                    algoritmoRepository.insertarNodoRuta(algoRuta.getId(),nodo,orden);
-                    orden++;
-                }
-                for(int nodo: ruta.retorno){
-                    algoritmoRepository.insertarNodoRuta(algoRuta.getId(),nodo,orden);
-                    orden++;
-                }
-            }
-            System.out.println(i);
-        }
+//        for(int i=listaRutas.size()-1; i>=0; i--){
+//            if(listaRutas.get(i).chofer == null) listaRutas.remove(i);
+//            else {
+//                Ruta ruta = listaRutas.get(i);
+//                AlgoRuta algoRuta = new AlgoRuta();
+//                algoRuta.setInicio(LocalDateTime.now());
+//                algoRuta.setDistancia(0.0);
+//                algoRuta.setCosto(0.0);
+//                algoRuta.setUsuario_id(ruta.chofer.getId());
+//                algoRuta.setVehiculo_id(ruta.vehiculo.getId());
+//                algoRuta.setEstado_id(2);
+//                algoritmoRepository.save(algoRuta);
+//                usuarioRepository.cambiarEstadoUsuario(algoRuta.getUsuario_id());
+//                algoritmoRepository.cambiarEstadoVehiculo(algoRuta.getVehiculo_id());
+//                int orden = 1;
+//                for(APedido pedido: ruta.pedidos){
+//                    algoritmoRepository.cambiarEstadoPedido(pedido.id);
+//                    algoritmoRepository.insertarPedidoRuta(algoRuta.getId(), pedido.id, orden);
+//                    orden++;
+//                }
+//                orden = 1;
+//                for(int nodo: ruta.recorrido){
+//                    algoritmoRepository.insertarNodoRuta(algoRuta.getId(),nodo,orden);
+//                    orden++;
+//                }
+//                for(int nodo: ruta.retorno){
+//                    algoritmoRepository.insertarNodoRuta(algoRuta.getId(),nodo,orden);
+//                    orden++;
+//                }
+//            }
+//            System.out.println(i);
+//        }
     }
 
     private boolean estaBloqueada(int tiempoMinutos, int nodoId){
