@@ -1,0 +1,10 @@
+Lista de rutas con sus conductores asignados:
+
+
+
+Información final de planeamiento de entregas:
+Pedidos entregados por la flota:             0
+Productos entregados por la flota:           0
+Kilometros recorridos por la flota:          0 km
+Costo asociado a los kilómetros recorridos:  0 soles
+fitness:  NaN

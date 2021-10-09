@@ -1,0 +1,297 @@
+-----------------------------------------
+tiempo:               0
+autosDisponibles:     10
+motosDisponibles:     20
+NumPedidosCola:       0
+NumPedidosFaltantes:  300
+NumPedidosEntregados: 0
+ganancia:             0.0
+numPenalidades:       0
+montoPenalidades:     0.0
+costoMantenimiento:   0.0
+-----------------------------------------
+Se agregó un nuevo pedido
+-----------------------------------------
+tiempo:               5
+autosDisponibles:     10
+motosDisponibles:     20
+NumPedidosCola:       1
+NumPedidosFaltantes:  299
+NumPedidosEntregados: 0
+ganancia:             0.0
+numPenalidades:       0
+montoPenalidades:     0.0
+costoMantenimiento:   0.0
+-----------------------------------------
+Se asignaron rutas
+-----------------------------------------
+tiempo:               5
+autosDisponibles:     10
+motosDisponibles:     19
+NumPedidosCola:       0
+NumPedidosFaltantes:  299
+NumPedidosEntregados: 0
+ganancia:             0.0
+numPenalidades:       0
+montoPenalidades:     0.0
+costoMantenimiento:   0.0
+-----------------------------------------
+Se agregó un nuevo pedido
+-----------------------------------------
+tiempo:               9
+autosDisponibles:     10
+motosDisponibles:     19
+NumPedidosCola:       1
+NumPedidosFaltantes:  298
+NumPedidosEntregados: 0
+ganancia:             0.0
+numPenalidades:       0
+montoPenalidades:     0.0
+costoMantenimiento:   0.0
+-----------------------------------------
+Se asignaron rutas
+-----------------------------------------
+tiempo:               9
+autosDisponibles:     10
+motosDisponibles:     18
+NumPedidosCola:       0
+NumPedidosFaltantes:  298
+NumPedidosEntregados: 0
+ganancia:             0.0
+numPenalidades:       0
+montoPenalidades:     0.0
+costoMantenimiento:   0.0
+-----------------------------------------
+Se agregó un nuevo pedido
+-----------------------------------------
+tiempo:               15
+autosDisponibles:     10
+motosDisponibles:     18
+NumPedidosCola:       1
+NumPedidosFaltantes:  297
+NumPedidosEntregados: 0
+ganancia:             0.0
+numPenalidades:       0
+montoPenalidades:     0.0
+costoMantenimiento:   0.0
+-----------------------------------------
+Se asignaron rutas
+-----------------------------------------
+tiempo:               15
+autosDisponibles:     10
+motosDisponibles:     17
+NumPedidosCola:       0
+NumPedidosFaltantes:  297
+NumPedidosEntregados: 0
+ganancia:             0.0
+numPenalidades:       0
+montoPenalidades:     0.0
+costoMantenimiento:   0.0
+-----------------------------------------
+Tipo vehiculo que retorna: 2
+Terminó una moto
+Se terminó una ruta
+-----------------------------------------
+tiempo:               25
+autosDisponibles:     10
+motosDisponibles:     18
+NumPedidosCola:       0
+NumPedidosFaltantes:  297
+NumPedidosEntregados: 0
+ganancia:             0.0
+numPenalidades:       0
+montoPenalidades:     0.0
+costoMantenimiento:   30.0
+-----------------------------------------
+Se entregó un pedido
+-----------------------------------------
+tiempo:               29
+autosDisponibles:     10
+motosDisponibles:     18
+NumPedidosCola:       0
+NumPedidosFaltantes:  297
+NumPedidosEntregados: 1
+ganancia:             800.0
+numPenalidades:       0
+montoPenalidades:     0.0
+costoMantenimiento:   30.0
+-----------------------------------------
+Se entregó un pedido
+-----------------------------------------
+tiempo:               27
+autosDisponibles:     10
+motosDisponibles:     18
+NumPedidosCola:       0
+NumPedidosFaltantes:  297
+NumPedidosEntregados: 2
+ganancia:             1400.0
+numPenalidades:       0
+montoPenalidades:     0.0
+costoMantenimiento:   30.0
+-----------------------------------------
+Se entregó un pedido
+-----------------------------------------
+tiempo:               19
+autosDisponibles:     10
+motosDisponibles:     18
+NumPedidosCola:       0
+NumPedidosFaltantes:  297
+NumPedidosEntregados: 3
+ganancia:             1600.0
+numPenalidades:       0
+montoPenalidades:     0.0
+costoMantenimiento:   30.0
+-----------------------------------------
+Se agregó un nuevo pedido
+-----------------------------------------
+tiempo:               33
+autosDisponibles:     10
+motosDisponibles:     18
+NumPedidosCola:       1
+NumPedidosFaltantes:  296
+NumPedidosEntregados: 3
+ganancia:             1600.0
+numPenalidades:       0
+montoPenalidades:     0.0
+costoMantenimiento:   30.0
+-----------------------------------------
+Se asignaron rutas
+-----------------------------------------
+tiempo:               33
+autosDisponibles:     10
+motosDisponibles:     17
+NumPedidosCola:       0
+NumPedidosFaltantes:  296
+NumPedidosEntregados: 3
+ganancia:             1600.0
+numPenalidades:       0
+montoPenalidades:     0.0
+costoMantenimiento:   30.0
+-----------------------------------------
+Se agregó un nuevo pedido
+-----------------------------------------
+tiempo:               43
+autosDisponibles:     10
+motosDisponibles:     17
+NumPedidosCola:       1
+NumPedidosFaltantes:  295
+NumPedidosEntregados: 3
+ganancia:             1600.0
+numPenalidades:       0
+montoPenalidades:     0.0
+costoMantenimiento:   30.0
+-----------------------------------------
+Se asignaron rutas
+-----------------------------------------
+tiempo:               43
+autosDisponibles:     10
+motosDisponibles:     16
+NumPedidosCola:       0
+NumPedidosFaltantes:  295
+NumPedidosEntregados: 3
+ganancia:             1600.0
+numPenalidades:       0
+montoPenalidades:     0.0
+costoMantenimiento:   30.0
+-----------------------------------------
+Tipo vehiculo que retorna: 2
+Terminó una moto
+Se terminó una ruta
+-----------------------------------------
+tiempo:               47
+autosDisponibles:     10
+motosDisponibles:     17
+NumPedidosCola:       0
+NumPedidosFaltantes:  295
+NumPedidosEntregados: 3
+ganancia:             1600.0
+numPenalidades:       0
+montoPenalidades:     0.0
+costoMantenimiento:   144.0
+-----------------------------------------
+Tipo vehiculo que retorna: 2
+Terminó una moto
+Se terminó una ruta
+-----------------------------------------
+tiempo:               55
+autosDisponibles:     10
+motosDisponibles:     18
+NumPedidosCola:       0
+NumPedidosFaltantes:  295
+NumPedidosEntregados: 3
+ganancia:             1600.0
+numPenalidades:       0
+montoPenalidades:     0.0
+costoMantenimiento:   294.0
+-----------------------------------------
+Se agregó un nuevo pedido
+-----------------------------------------
+tiempo:               78
+autosDisponibles:     10
+motosDisponibles:     18
+NumPedidosCola:       1
+NumPedidosFaltantes:  294
+NumPedidosEntregados: 3
+ganancia:             1600.0
+numPenalidades:       0
+montoPenalidades:     0.0
+costoMantenimiento:   294.0
+-----------------------------------------
+Se asignaron rutas
+-----------------------------------------
+tiempo:               78
+autosDisponibles:     10
+motosDisponibles:     17
+NumPedidosCola:       0
+NumPedidosFaltantes:  294
+NumPedidosEntregados: 3
+ganancia:             1600.0
+numPenalidades:       0
+montoPenalidades:     0.0
+costoMantenimiento:   294.0
+-----------------------------------------
+Se entregó un pedido
+-----------------------------------------
+tiempo:               79
+autosDisponibles:     10
+motosDisponibles:     17
+NumPedidosCola:       0
+NumPedidosFaltantes:  294
+NumPedidosEntregados: 4
+ganancia:             1800.0
+numPenalidades:       0
+montoPenalidades:     0.0
+costoMantenimiento:   294.0
+-----------------------------------------
+Se agregó un nuevo pedido
+-----------------------------------------
+tiempo:               82
+autosDisponibles:     10
+motosDisponibles:     17
+NumPedidosCola:       1
+NumPedidosFaltantes:  293
+NumPedidosEntregados: 4
+ganancia:             1800.0
+numPenalidades:       0
+montoPenalidades:     0.0
+costoMantenimiento:   294.0
+-----------------------------------------
+Se asignaron rutas
+-----------------------------------------
+tiempo:               82
+autosDisponibles:     10
+motosDisponibles:     16
+NumPedidosCola:       0
+NumPedidosFaltantes:  293
+NumPedidosEntregados: 4
+ganancia:             1800.0
+numPenalidades:       0
+montoPenalidades:     0.0
+costoMantenimiento:   294.0
+-----------------------------------------
+Se entregó un pedido
+-----------------------------------------
+tiempo:               100
+autosDisponibles:     10
+motosDisponibles:     16
+NumPedidos
