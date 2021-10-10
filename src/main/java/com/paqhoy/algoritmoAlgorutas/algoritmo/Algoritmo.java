@@ -3,12 +3,12 @@ package com.paqhoy.algoritmoAlgorutas.algoritmo;
 import com.paqhoy.algoritmoAlgorutas.algoritmo.dijkstra.Dijkstra;
 import com.paqhoy.algoritmoAlgorutas.algoritmo.kmeans.Kmeans;
 import com.paqhoy.algoritmoAlgorutas.model.*;
-import com.paqhoy.algoritmoAlgorutas.repository.AlgoritmoRepository;
-import com.paqhoy.algoritmoAlgorutas.repository.UsuarioRepository;
+// import com.paqhoy.algoritmoAlgorutas.repository.AlgoritmoRepository;
+// import com.paqhoy.algoritmoAlgorutas.repository.UsuarioRepository;
 import com.paqhoy.algoritmoAlgorutas.service.CallesBloqueadasService;
-import com.paqhoy.algoritmoAlgorutas.service.PedidoService;
-import com.paqhoy.algoritmoAlgorutas.service.UsuarioService;
-import com.paqhoy.algoritmoAlgorutas.service.VehiculoService;
+// import com.paqhoy.algoritmoAlgorutas.service.PedidoService;
+// import com.paqhoy.algoritmoAlgorutas.service.UsuarioService;
+// import com.paqhoy.algoritmoAlgorutas.service.VehiculoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,26 +27,38 @@ import java.util.*;
 @Slf4j
 @Transactional
 public class Algoritmo {
-
     public List<APedido> listaPedidos;
+
+    // POR BORRAR
     public List<Usuario> listaChoferesMoto;
     public List<Usuario> listaChoferesAuto;
+
     public List<AVehiculo> listaVehiculoTipo1;
     public List<AVehiculo> listaVehiculoTipo2;
     public List<AVehiculo> listaVehiculoTipo3;
     public List<AVehiculo> listaVehiculoTipo4;
+
     public List<Cluster> clusterResult;
     public List<CallesBloqueadas> listaCallesBloqueadas;
     public List<Ruta> listaRutas;
     public Dijkstra dijkstraAlgorithm;
     public Kmeans kmeans;
 
+    // POR BORRAR
+    public Integer cantidadProductos = 0;
     public Integer cantClusterMotos = 0;
     public Integer cantClusterAutos = 0;
     public Integer cantAutos = 0;
     public Integer cantMotos = 0;
 
-    // public Integer cantidadProductos = 0;
+    public Integer cantClusterVehiculoTipo1 = 0;
+    public Integer cantClusterVehiculoTipo2 = 0;
+    public Integer cantClusterVehiculoTipo3 = 0;
+    public Integer cantClusterVehiculoTipo4 = 0;
+    public Integer cantVehiculoTipo1 = 0;
+    public Integer cantVehiculoTipo2 = 0;
+    public Integer cantVehiculoTipo3 = 0;
+    public Integer cantVehiculoTipo4 = 0;
 
     @Autowired
     private CallesBloqueadasService callesBloqueadasService;
@@ -54,91 +66,128 @@ public class Algoritmo {
     @PersistenceUnit
     private EntityManagerFactory entityManagerFactory;
 
+    /**
+     * Inicializa las variables necesarias para ejecutar el algoritmo
+     * 
+     * @return una cadena que indica el resultado del intento de inicialización
+     */
     public String inicializar() {
-
-        // TODO POR BORRAR
         // listaChoferesAuto = usuarioService.getConductoresAutoDisponibles();
         // listaChoferesMoto = usuarioService.getConductoresMotoDisponibles();
 
         // Inicializando listas de vehículos
-        listaVehiculoTipo1 = new ArrayList<>();
-        listaVehiculoTipo2 = new ArrayList<>();
-        listaVehiculoTipo3 = new ArrayList<>();
-        listaVehiculoTipo4 = new ArrayList<>();
+        listaVehiculoTipo1 = initializeVehicleList(1);
+        listaVehiculoTipo2 = initializeVehicleList(2);
+        listaVehiculoTipo3 = initializeVehicleList(3);
+        listaVehiculoTipo4 = initializeVehicleList(4);
 
-        for (int i = 0; i < 2; i++) {
-            AVehiculo vehiculo = new AVehiculo();
-            vehiculo.setTipo("Tipo TA");
-            vehiculo.setTipo_id(1);
-            vehiculo.setCapacidad(25);
-            vehiculo.setPeso(2.5);
-            vehiculo.setVelocidad(50.00);
-            listaVehiculoTipo1.add(vehiculo);
-        }
-
-        for (int i = 0; i < 4; i++) {
-            AVehiculo vehiculo = new AVehiculo();
-            vehiculo.setTipo("Tipo TB");
-            vehiculo.setTipo_id(2);
-            vehiculo.setCapacidad(20);
-            vehiculo.setPeso(2.0);
-            vehiculo.setVelocidad(50.00);
-            listaVehiculoTipo2.add(vehiculo);
-        }
-
-        for (int i = 0; i < 4; i++) {
-            AVehiculo vehiculo = new AVehiculo();
-            vehiculo.setTipo("Tipo TC");
-            vehiculo.setTipo_id(3);
-            vehiculo.setCapacidad(15);
-            vehiculo.setPeso(1.5);
-            vehiculo.setVelocidad(50.00);
-            listaVehiculoTipo3.add(vehiculo);
-        }
-
-        for (int i = 0; i < 10; i++) {
-            AVehiculo vehiculo = new AVehiculo();
-            vehiculo.setTipo("Tipo TD");
-            vehiculo.setTipo_id(4);
-            vehiculo.setCapacidad(10);
-            vehiculo.setPeso(1.0);
-            vehiculo.setVelocidad(50.00);
-            listaVehiculoTipo4.add(vehiculo);
-        }
-
+        // Obteniendo la lista de pedidos
         listaPedidos = obtenerListaPedidos();
 
         // Sin vehículos
-        if (listaVehiculoTipo1.size() == 0 && listaVehiculoTipo2.size() == 0 && listaVehiculoTipo3.size() == 0
-                && listaVehiculoTipo4.size() == 0) {
-            return "No hay vehículos disponibles para las rutas";
-        }
+        // if (listaVehiculoTipo1.size() == 0 && listaVehiculoTipo2.size() == 0 &&
+        // listaVehiculoTipo3.size() == 0
+        // && listaVehiculoTipo4.size() == 0) {
+        // return "No hay vehículos disponibles para las rutas";
+        // }
 
         // Sin pedidos
         if (listaPedidos.size() == 0) {
             return "No hay pedidos en cola";
         }
 
+        // Obteniendo la cantidad de clusters
         obtenerCantidadClusters();
+
+        // TODO CAMBIAR A SOLO AUTOS
+        // Para agrupar en clusters
         kmeans = new Kmeans(cantMotos, cantAutos);
+
+        // Obteniendo las calles bloqueadas
         listaCallesBloqueadas = callesBloqueadasService.obtenerCallesBloqueadas();
+
+        // Obteniendo la lista de adyacencia
         obtenerListaAdyacente();
 
         return "correcto";
     }
 
+    /**
+     * Inicializa una lista de vehículos
+     * 
+     * @param typeId identificador del tipo de vehículo
+     * @return lista con vehículos agregados
+     */
+    public List<AVehiculo> initializeVehicleList(int typeId) {
+        List<AVehiculo> list = new ArrayList<>();
+        int count;
+        String type;
+        int capacity;
+        double weight;
+
+        if (typeId == 1) {
+            count = 2;
+            type = "Tipo TA";
+            capacity = 25;
+            weight = 2.5;
+        } else if (typeId == 2) {
+            count = 4;
+            type = "Tipo TB";
+            capacity = 20;
+            weight = 2.0;
+        } else if (typeId == 3) {
+            count = 4;
+            type = "Tipo TC";
+            capacity = 15;
+            weight = 1.5;
+        } else {
+            count = 10;
+            type = "Tipo TD";
+            capacity = 10;
+            weight = 1.0;
+        }
+
+        for (int i = 0; i < count; i++) {
+            AVehiculo vehiculo = new AVehiculo();
+            vehiculo.setTipo(type);
+            vehiculo.setTipoId(typeId);
+            vehiculo.setCapacidad(capacity);
+            vehiculo.setPeso(weight);
+            vehiculo.setVelocidad(50.0);
+            list.add(vehiculo);
+        }
+
+        return list;
+    };
+
+    /**
+     * Genera las rutas a partir de los datos obtenidos
+     * 
+     * @return cadena que indica que la generación de rutas fue exitosa
+     */
     public String generarRutas() {
         LocalDateTime tiempo1, tiempo2;
+
         tiempo1 = LocalDateTime.now();
+
         obtenerPedidosClusterizados();
         obtenerRutas();
         asignarRutas();
+
         tiempo2 = LocalDateTime.now();
-        System.out.println(
-                "Tiempo de ejecución del algoritmo: " + (tiempo2.getSecond() - tiempo1.getSecond()) + " segundos");
+
+        System.out.print("Tiempo de ejecución del algoritmo: ");
+        System.out.println((tiempo2.getSecond() - tiempo1.getSecond()) + " segundos");
+
         return "Rutas generadas exitosamente";
     }
 
+    /**
+     * Obtiene mes y año a partir del nombre del archivo de nodos bloqueados
+     * 
+     * @param fileName cadena con la ruta completa del archivo
+     * @return cadena con el mes y el año correspondientes
+     */
     public static String getLockedNodesDateFromName(String fileName) {
         File file = new File(fileName);
         String name = file.getName();
@@ -147,6 +196,12 @@ public class Algoritmo {
         return strYearMonth;
     }
 
+    /**
+     * Obtiene mes y año a partir del nombre del archivo de pedidos
+     * 
+     * @param fileName cadena con la ruta completa del archivo
+     * @return cadena con el mes y el año correspondientes
+     */
     public static String getOrdersDateFromName(String fileName) {
         File file = new File(fileName);
         String name = file.getName();
@@ -155,18 +210,24 @@ public class Algoritmo {
         return strYearMonth;
     }
 
-    public List<APedido> obtenerListaPedidos() throws IOException {
-        // Para lectura del archivo
-        String fileName = "src/main/resources/202209bloqueadas.txt";
-        final BufferedReader br = new BufferedReader(new FileReader(fileName));
-
-        String strYearMonth = getOrdersDateFromName(fileName); // datos del nombre del archivo
-        String line; // línea del archivo
-        int id = 1; // contador para identificador
-        List<APedido> listaPedidos = new ArrayList<APedido>(); // para almacenar pedidos
-
-        // Leyendo datos del archivo
+    /**
+     * Obtiene la lista de pedidos a partir de un archivo de texto
+     * 
+     * @return lista de pedidos
+     */
+    public List<APedido> obtenerListaPedidos() {
         try {
+            // Para lectura del archivo
+            String fileName = "src/main/resources/202209bloqueadas.txt";
+            final BufferedReader br = new BufferedReader(new FileReader(fileName));
+
+            String strYearMonth = getOrdersDateFromName(fileName); // datos del nombre del archivo
+            String line; // línea del archivo
+            int id = 1; // contador para identificador
+            List<APedido> listaPedidos = new ArrayList<APedido>(); // para almacenar pedidos
+
+            // Leyendo datos del archivo
+
             while ((line = br.readLine()) != null) {
                 final String[] tokens = line.trim().split(",");
                 final String[] date = tokens[0].trim().split(":");
@@ -183,14 +244,12 @@ public class Algoritmo {
 
                 APedido pedido = new APedido(id++, x, y, demand, remaining, orderDate);
                 listaPedidos.add(pedido);
-
                 System.out.println(day + " " + hour + " " + min + " " + x + " " + y + " " + demand + " " + remaining);
+                br.close();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        br.close();
 
         return listaPedidos;
 
@@ -211,33 +270,57 @@ public class Algoritmo {
         // return respuesta;
     }
 
+    /**
+     * Obtiene la cantidad de clusters necesarios para el algoritmo
+     */
     public void obtenerCantidadClusters() {
-        cantMotos = listaVehiculoTipo1.size();
-        cantAutos = listaVehiculoTipo2.size();
-        System.out.println(listaVehiculoTipo1.size() + " " + listaVehiculoTipo2.size());
-        System.out.println(listaChoferesMoto.size() + " " + listaChoferesAuto.size());
+        // cantMotos = listaMotos.size();
+        // cantAutos = listaAutos.size();
+
+        cantVehiculoTipo1 = listaVehiculoTipo1.size();
+        cantVehiculoTipo2 = listaVehiculoTipo2.size();
+        cantVehiculoTipo3 = listaVehiculoTipo3.size();
+        cantVehiculoTipo4 = listaVehiculoTipo4.size();
+
+        // System.out.println(listaChoferesMoto.size() + " " +
+        // listaChoferesAuto.size());
+        System.out.println(listaVehiculoTipo1.size() + " " + listaVehiculoTipo2.size() + " " + listaVehiculoTipo3.size()
+                + " " + listaVehiculoTipo4.size());
+
         // TODO A: 2.5Tn B: 2Tn C: 1.5Tn D: 1Tn
+        // TODO ENTENDER
         int k = (int) (0.9 * (cantidadProductos / (cantMotos * 4 + cantAutos * 25)));
         if (k > 10)
             k = 10;
         if (k < 3)
             k = 3;
+
+        // TODO ENTENDER
         cantClusterMotos = cantMotos * k;
         cantClusterAutos = cantAutos * k;
     }
 
+    /**
+     * Obtiene la lista de adyancencia a partir de un archivo de texto
+     */
     public void obtenerListaAdyacente() {
         int origen, destino;
         InputStream grafo = getClass().getClassLoader().getResourceAsStream("grafo.txt");
         Scanner sc = new Scanner(grafo);
+
         dijkstraAlgorithm = new Dijkstra(Configuraciones.V, listaCallesBloqueadas);
         for (int i = 0; i < Configuraciones.E; ++i) {
             origen = sc.nextInt() + 1;
             destino = sc.nextInt() + 1;
             dijkstraAlgorithm.addEdge(origen, destino);
         }
+
+        sc.close();
     }
 
+    /**
+     * Distribuye los pedidos en clusters
+     */
     public void obtenerPedidosClusterizados() {
         int cantClusters = cantClusterMotos + cantClusterAutos;
         List<AVehiculo> vehiculos = inicializarVehiculos();
@@ -256,6 +339,8 @@ public class Algoritmo {
         System.out.println();
     }
 
+    // FALTA ENTENDER
+    // FALTA CAMBIAR A SOLO AUTOS
     public List<AVehiculo> inicializarVehiculos() {
         List<AVehiculo> lista = new ArrayList<>();
         for (int i = 0; i < cantClusterMotos; i++) {
@@ -264,7 +349,7 @@ public class Algoritmo {
             vehiculo.setCapacidad(4);
             vehiculo.setPeso(3.0);
             vehiculo.setVelocidad(60.00);
-            vehiculo.setTipo_id(2);
+            vehiculo.setTipoId(2);
             lista.add(vehiculo);
         }
         for (int i = 0; i < cantClusterAutos; i++) {
@@ -273,7 +358,7 @@ public class Algoritmo {
             vehiculo.setCapacidad(25);
             vehiculo.setPeso(5.0);
             vehiculo.setVelocidad(30.00);
-            vehiculo.setTipo_id(1);
+            vehiculo.setTipoId(1);
             lista.add(vehiculo);
         }
         return lista;
@@ -283,7 +368,7 @@ public class Algoritmo {
         List<Cluster> lista = new ArrayList<Cluster>();
         for (AVehiculo vehiculo : vehiculos) {
             Cluster cluster = new Cluster();
-            // TODO ENTENDER ESTA COSA
+            // TODO ENTENDER
             cluster.pedidos = new PriorityQueue<APedido>(500, new Comparator<APedido>() {
                 // override compare method
                 public int compare(APedido i, APedido j) {
@@ -313,7 +398,6 @@ public class Algoritmo {
     }
 
     public void obtenerRutas() {
-
         // calculamos el tiempo en minutos en que iniciamos a correr el algoritmo
         LocalDateTime tiempo = LocalDateTime.now();
         LocalDateTime d1 = LocalDateTime.of(2021, Month.JANUARY, 1, 0, 0);
@@ -469,7 +553,7 @@ public class Algoritmo {
 
                 dijkstraAlgorithm.dijkstra(origen, tiempoMinutos, (int) Math.round(cluster.vehiculo.getVelocidad()));
 
-                int tamanoIni = ruta.retorno.size();
+                int tamanoIni = ruta.retorno.size(); // FALTA ENTENDER EL TAMANOINI AQUI
 
                 dijkstraAlgorithm.printShortestPath(Configuraciones.almacen, ruta, 2);
             }
@@ -481,13 +565,16 @@ public class Algoritmo {
         System.out.println("Máximo tiempo de entrega: " + maximoTiempo + " minutos");
     }
 
+    /**
+     * Asigna rutas a choferes
+     */
     public void asignarRutas() {
         int contadorAutos = 0;
-        log.info("Asignar rutas: ");
-        log.info("Size Chof Auto: " + listaChoferesAuto.size());
-        log.info("Size Chof Moto: " + listaChoferesMoto.size());
-        log.info("cantAutos: " + cantAutos);
-        log.info("cantMotos: " + cantMotos);
+        System.out.println("Asignar rutas: ");
+        System.out.println("Size Chof Auto: " + listaChoferesAuto.size());
+        System.out.println("Size Chof Moto: " + listaChoferesMoto.size());
+        System.out.println("cantAutos: " + cantAutos);
+        System.out.println("cantMotos: " + cantMotos);
         for (Usuario chofer : listaChoferesAuto) {
             if (contadorAutos == cantAutos)
                 break;
@@ -495,7 +582,7 @@ public class Algoritmo {
             int contador = 0;
             int minCont = -1;
             for (Ruta ruta : listaRutas) {
-                if (ruta.vehiculo.getTipo_id() == 1 && ruta.chofer == null && minimo > ruta.tiempoMin) {
+                if (ruta.vehiculo.getTipoId() == 1 && ruta.chofer == null && minimo > ruta.tiempoMin) {
                     minimo = ruta.tiempoMin;
                     minCont = contador;
                 }
@@ -505,8 +592,8 @@ public class Algoritmo {
                 break;
             listaRutas.get(minCont).chofer = chofer;
             listaRutas.get(minCont).vehiculo = listaVehiculoTipo2.get(contadorAutos);
-            log.info("MinCont: " + minCont);
-            log.info("Auto: " + listaRutas.get(minCont).chofer);
+            System.out.println("MinCont: " + minCont);
+            System.out.println("Auto: " + listaRutas.get(minCont).chofer);
             contadorAutos++;
         }
 
@@ -518,7 +605,7 @@ public class Algoritmo {
             int contador = 0;
             int minCont = -1;
             for (Ruta ruta : listaRutas) {
-                if (ruta.vehiculo.getTipo_id() == 2 && ruta.chofer == null && minimo > ruta.tiempoMin) {
+                if (ruta.vehiculo.getTipoId() == 2 && ruta.chofer == null && minimo > ruta.tiempoMin) {
                     minimo = ruta.tiempoMin;
                     minCont = contador;
                 }
@@ -528,8 +615,8 @@ public class Algoritmo {
                 break;
             listaRutas.get(minCont).chofer = chofer;
             listaRutas.get(minCont).vehiculo = listaVehiculoTipo1.get(contadorMotos);
-            log.info("MinCont: " + minCont);
-            log.info("Auto: " + listaRutas.get(minCont).chofer);
+            System.out.println("MinCont: " + minCont);
+            System.out.println("Auto: " + listaRutas.get(minCont).chofer);
             contadorMotos++;
         }
 
@@ -567,6 +654,14 @@ public class Algoritmo {
         // }
     }
 
+    /**
+     * Verifica si un nodo está bloqueado
+     * 
+     * @param tiempoMinutos el tiempo que lleva ejecutándose el algoritmo
+     * @param nodoId        identificador del nodo a verificar
+     * 
+     * @return true o false dependiendo de si el nodo está bloqueado o no
+     */
     private boolean estaBloqueada(int tiempoMinutos, int nodoId) {
         for (CallesBloqueadas par : listaCallesBloqueadas) {
             if ((tiempoMinutos >= par.getMinutosInicio()) && (tiempoMinutos < par.getMinutosFin())) {

@@ -22,7 +22,15 @@ public class CallesBloqueadas {
         nodos.add(nodoId);
     }
 
-    public boolean estaNodo(int nodoId){
+    public boolean estaNodo(int nodoId) {
         return nodos.contains(nodoId);
+    }
+
+    public Integer getMinutosInicio() {
+        return this.minutosInicio;
+    }
+
+    public Integer getMinutosFin() {
+        return this.minutosFin;
     }
 }
