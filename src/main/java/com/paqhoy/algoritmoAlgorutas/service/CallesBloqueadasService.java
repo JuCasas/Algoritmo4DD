@@ -35,22 +35,22 @@ public class CallesBloqueadasService {
     @Autowired
     private BloqueadoRepository bloqueadoRepository;
 
-    public List<CallesBloqueadas> obtenerCallesBloqueadasActuales(){
+    public List<CallesBloqueadas> obtenerCallesBloqueadasActuales() {
         List<Bloqueado> lista = bloqueadoRepository.obtenerCallesBloqueadasActuales();
         List<CallesBloqueadas> cbLista = new ArrayList<>();
-        for(Bloqueado bloqueado: lista){
-            CallesBloqueadas cb = new CallesBloqueadas(bloqueado.getId(), convertLocalDateToMinutes(bloqueado.getInicio()), convertLocalDateToMinutes(bloqueado.getFin()));
+        for (Bloqueado bloqueado : lista) {
+            CallesBloqueadas cb = new CallesBloqueadas(bloqueado.getId(),
+                    convertLocalDateToMinutes(bloqueado.getInicio()), convertLocalDateToMinutes(bloqueado.getFin()));
             String line = bloqueado.getNodos();
-            while(line.length() != 0){
+            while (line.length() != 0) {
                 int indexChar = line.indexOf(',');
                 int idNodo;
-                if (indexChar == -1){
-                    idNodo = Integer.parseInt( line );
+                if (indexChar == -1) {
+                    idNodo = Integer.parseInt(line);
                     line = "";
-                }
-                else{
-                    idNodo = Integer.parseInt( line.substring( 0, indexChar ) );
-                    line = line.substring( indexChar + 1 );
+                } else {
+                    idNodo = Integer.parseInt(line.substring(0, indexChar));
+                    line = line.substring(indexChar + 1);
                 }
                 cb.addNode(idNodo);
             }
@@ -59,22 +59,22 @@ public class CallesBloqueadasService {
         return cbLista;
     }
 
-    public List<CallesBloqueadas> obtenerCallesBloqueadas(){
+    public List<CallesBloqueadas> obtenerCallesBloqueadas() {
         List<Bloqueado> lista = bloqueadoRepository.obtenerCallesBloqueadas();
         List<CallesBloqueadas> cbLista = new ArrayList<>();
-        for(Bloqueado bloqueado: lista){
-            CallesBloqueadas cb = new CallesBloqueadas(bloqueado.getId(), convertLocalDateToMinutes(bloqueado.getInicio()), convertLocalDateToMinutes(bloqueado.getFin()));
+        for (Bloqueado bloqueado : lista) {
+            CallesBloqueadas cb = new CallesBloqueadas(bloqueado.getId(),
+                    convertLocalDateToMinutes(bloqueado.getInicio()), convertLocalDateToMinutes(bloqueado.getFin()));
             String line = bloqueado.getNodos();
-            while(line.length() != 0){
+            while (line.length() != 0) {
                 int indexChar = line.indexOf(',');
                 int idNodo;
-                if (indexChar == -1){
-                    idNodo = Integer.parseInt( line );
+                if (indexChar == -1) {
+                    idNodo = Integer.parseInt(line);
                     line = "";
-                }
-                else{
-                    idNodo = Integer.parseInt( line.substring( 0, indexChar ) );
-                    line = line.substring( indexChar + 1 );
+                } else {
+                    idNodo = Integer.parseInt(line.substring(0, indexChar));
+                    line = line.substring(indexChar + 1);
                 }
                 cb.addNode(idNodo);
             }
@@ -83,12 +83,12 @@ public class CallesBloqueadasService {
         return cbLista;
     }
 
-    private Integer convertLocalDateToMinutes(LocalDateTime ldt){
+    private Integer convertLocalDateToMinutes(LocalDateTime ldt) {
         LocalDateTime d1 = LocalDateTime.of(2021, Month.JANUARY, 1, 0, 0);
         return (int) ChronoUnit.MINUTES.between(d1, ldt);
     }
 
-    public String uploadFile (MultipartFile file) {
+    public String uploadFile(MultipartFile file) {
         try {
             File fileObj = convertMultiPartFileToFile(file);
             getCallesBloqueadas(fileObj);
@@ -100,12 +100,12 @@ public class CallesBloqueadasService {
         }
     }
 
-    private File convertMultiPartFileToFile(MultipartFile file){
+    private File convertMultiPartFileToFile(MultipartFile file) {
         File convertedFile = new File(file.getOriginalFilename());
         try (FileOutputStream fos = new FileOutputStream(convertedFile)) {
             fos.write(file.getBytes());
         } catch (IOException e) {
-            log.error("Error converting multipartFile to File", e);
+            e.printStackTrace();
         }
         return convertedFile;
     }
@@ -119,65 +119,64 @@ public class CallesBloqueadasService {
             Intervalo intervalo = getIntervaloFromLine(line, strDate);
             intervaloRepository.save(intervalo);
             intervaloList.add(intervalo);
-            line = line.substring( line.indexOf(',') + 1 );
+            line = line.substring(line.indexOf(',') + 1);
             List<IntervaloNodo> intervaloNodoList = new ArrayList<>();
-            while(line.length() != 0){
+            while (line.length() != 0) {
                 IntervaloNodo intervaloNodo = new IntervaloNodo();
                 int indexChar = line.indexOf(',');
-                int x,y;
-                x = Integer.parseInt( line.substring( 0, indexChar ) );
-                line = line.substring( indexChar + 1 );
+                int x, y;
+                x = Integer.parseInt(line.substring(0, indexChar));
+                line = line.substring(indexChar + 1);
                 indexChar = line.indexOf(',');
-                if (indexChar == -1){
-                    y = Integer.parseInt( line );
+                if (indexChar == -1) {
+                    y = Integer.parseInt(line);
                     line = "";
-                }
-                else{
-                    y = Integer.parseInt( line.substring( 0, indexChar ) );
-                    line = line.substring( indexChar + 1 );
+                } else {
+                    y = Integer.parseInt(line.substring(0, indexChar));
+                    line = line.substring(indexChar + 1);
                 }
                 intervaloNodo.setNodo_id(x + 71 * y + 1);
                 intervaloNodo.setIntervalo_id(intervalo.getId());
-                intervaloNodoList.add( intervaloNodo );
+                intervaloNodoList.add(intervaloNodo);
             }
             intervaloNodoRepository.saveAll(intervaloNodoList);
         }
         sc.close();
-//        intervaloRepository.saveAll(intervaloList);
+        // intervaloRepository.saveAll(intervaloList);
     }
 
-    private String getDateFromFileName(String fileName){
+    private String getDateFromFileName(String fileName) {
         String strDate = fileName.substring(0, 4) + "-" + fileName.substring(4, 6);
         return strDate;
     }
 
-    private Intervalo getIntervaloFromLine(String line, String strDate){
+    private Intervalo getIntervaloFromLine(String line, String strDate) {
         Intervalo intervalo = new Intervalo();
 
-        int dia = getIntFromLine(line,":");
-        line = line.substring( line.indexOf(':') + 1 );
-        int hh = getIntFromLine(line,":");
-        line = line.substring( line.indexOf(':') + 1 );
-        int mm = getIntFromLine(line,"-");
-        line = line.substring( line.indexOf('-') + 1 );
+        int dia = getIntFromLine(line, ":");
+        line = line.substring(line.indexOf(':') + 1);
+        int hh = getIntFromLine(line, ":");
+        line = line.substring(line.indexOf(':') + 1);
+        int mm = getIntFromLine(line, "-");
+        line = line.substring(line.indexOf('-') + 1);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-d H:m:s");
         LocalDateTime inicio = LocalDateTime.parse(strDate + "-" + dia + " " + hh + ":" + mm + ":0", formatter);
         intervalo.setInicio(inicio);
 
-        dia = getIntFromLine(line,":");
-        line = line.substring( line.indexOf(':') + 1 );
-        hh = getIntFromLine(line,":");
-        line = line.substring( line.indexOf(':') + 1 );
-        mm = getIntFromLine(line,",");
-        line = line.substring( line.indexOf(',') + 1 );
+        dia = getIntFromLine(line, ":");
+        line = line.substring(line.indexOf(':') + 1);
+        hh = getIntFromLine(line, ":");
+        line = line.substring(line.indexOf(':') + 1);
+        mm = getIntFromLine(line, ",");
+        line = line.substring(line.indexOf(',') + 1);
         LocalDateTime fin = LocalDateTime.parse(strDate + "-" + dia + " " + hh + ":" + mm + ":0", formatter);
         intervalo.setFin(fin);
 
         return intervalo;
     }
 
-    private Integer getIntFromLine(String line, String c){
+    private Integer getIntFromLine(String line, String c) {
         int indexChar = line.indexOf(c);
-        return Integer.parseInt( line.substring( 0, indexChar ) );
+        return Integer.parseInt(line.substring(0, indexChar));
     }
 }

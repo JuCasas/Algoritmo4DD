@@ -17,6 +17,14 @@ public class APedido implements Comparable<APedido> {
     public LocalDateTime fechaLimite;
     public int tiempoEntregaRealizada;
 
+    public APedido(int id, int x, int y, int cantidad, int minFaltantes) {
+        this.id = id;
+        this.x = x;
+        this.y = y;
+        this.cantidad = cantidad;
+        this.minFaltantes = minFaltantes;
+    }
+
     public APedido(int id, int x, int y, int cantidad, int minFaltantes, LocalDateTime fechaPedido) {
         this.id = id;
         this.x = x;

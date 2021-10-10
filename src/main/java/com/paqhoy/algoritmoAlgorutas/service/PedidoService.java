@@ -25,7 +25,7 @@ public class PedidoService {
     @Autowired
     private PedidoRepository pedidoRepository;
 
-    public String uploadFile (MultipartFile file) {
+    public String uploadFile(MultipartFile file) {
         try {
             File fileObj = convertMultiPartFileToFile(file);
             getAllPedidos(fileObj);
@@ -37,12 +37,12 @@ public class PedidoService {
         }
     }
 
-    private File convertMultiPartFileToFile(MultipartFile file){
+    private File convertMultiPartFileToFile(MultipartFile file) {
         File convertedFile = new File(file.getOriginalFilename());
         try (FileOutputStream fos = new FileOutputStream(convertedFile)) {
             fos.write(file.getBytes());
         } catch (IOException e) {
-            log.error("Error converting multipartFile to File", e);
+            e.printStackTrace();
         }
         return convertedFile;
     }
@@ -60,44 +60,47 @@ public class PedidoService {
         pedidoRepository.saveAll(pedidosList);
     }
 
-    private Pedido getPedidoFromLine(String line, String strDate){
+    private Pedido getPedidoFromLine(String line, String strDate) {
         Pedido pedido = new Pedido();
 
-        //set Fecha del pedido
-        int hh = getIntFromLine(line,":");
-        line = line.substring( line.indexOf(':') + 1 );
+        // set Fecha del pedido
+        int hh = getIntFromLine(line, ":");
+        line = line.substring(line.indexOf(':') + 1);
         int mm = getIntFromLine(line, ",");
-        line = line.substring( line.indexOf(',') + 1 );
+        line = line.substring(line.indexOf(',') + 1);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd H:m:s");
         LocalDateTime fechaPedido = LocalDateTime.parse(strDate + " " + hh + ":" + mm + ":0", formatter);
         pedido.setFecha_pedido(fechaPedido);
 
-        //set nodo con formula
+        // set nodo con formula
         int y = getIntFromLine(line, ",");
-        line = line.substring( line.indexOf(',') + 1 );
+        line = line.substring(line.indexOf(',') + 1);
         int x = getIntFromLine(line, ",");
-        line = line.substring( line.indexOf(',') + 1 );
+        line = line.substring(line.indexOf(',') + 1);
         pedido.setDireccion_id(71 * y + x + 1);
 
-        //set precio y cantidad de paquetes
+        // set precio y cantidad de paquetes
         int numPaq = getIntFromLine(line, ",");
-        line = line.substring( line.indexOf(',') + 1 );
+        line = line.substring(line.indexOf(',') + 1);
         pedido.setCantidad(numPaq);
         pedido.setPrecio(numPaq * Configuraciones.precio);
 
-        //set cliente
+        // set cliente
         int idCliente = getIntFromLine(line, ",");
-        line = line.substring( line.indexOf(',') + 1 );
+        line = line.substring(line.indexOf(',') + 1);
         pedido.setCliente_id(idCliente);
 
-        //set tipo de pedido y hora máxima de entrega
+        // set tipo de pedido y hora máxima de entrega
         int hLimite = Integer.parseInt(line);
-        if(hLimite <= 4) pedido.setTipo_id(hLimite-1);
-        else if(hLimite == 8) pedido.setTipo_id(4);
-        else pedido.setTipo_id(5);
+        if (hLimite <= 4)
+            pedido.setTipo_id(hLimite - 1);
+        else if (hLimite == 8)
+            pedido.setTipo_id(4);
+        else
+            pedido.setTipo_id(5);
         pedido.setFecha_limite(fechaPedido.plusHours(hLimite));
 
-        //valores por defecto iniciales
+        // valores por defecto iniciales
         pedido.setFecha_entrega(null);
         pedido.setCreated_at(LocalDateTime.now());
         pedido.setUpdated_at(LocalDateTime.now());
@@ -106,17 +109,17 @@ public class PedidoService {
         return pedido;
     }
 
-    private String getDateFromFileName(String fileName){
-        String strDate = fileName.substring(0, 4) + "-" + fileName.substring(4, 6) + "-" + fileName.substring(6,8);
+    private String getDateFromFileName(String fileName) {
+        String strDate = fileName.substring(0, 4) + "-" + fileName.substring(4, 6) + "-" + fileName.substring(6, 8);
         return strDate;
     }
 
-    private Integer getIntFromLine(String line, String c){
+    private Integer getIntFromLine(String line, String c) {
         int indexChar = line.indexOf(c);
-        return Integer.parseInt( line.substring( 0, indexChar ) );
+        return Integer.parseInt(line.substring(0, indexChar));
     }
 
-    public List<Pedido> getPedidosPorAtender(){
-        return  pedidoRepository.findPedidosPorAtender();
+    public List<Pedido> getPedidosPorAtender() {
+        return pedidoRepository.findPedidosPorAtender();
     }
 }

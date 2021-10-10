@@ -15,4 +15,28 @@ public class IntervaloNodo {
     private Integer id;
     private Integer nodo_id;
     private Integer intervalo_id;
+
+    public Integer getId() {
+        return this.id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getNodo_id() {
+        return this.nodo_id;
+    }
+
+    public void setNodo_id(Integer nodo_id) {
+        this.nodo_id = nodo_id;
+    }
+
+    public Integer getIntervalo_id() {
+        return this.intervalo_id;
+    }
+
+    public void setIntervalo_id(Integer intervalo_id) {
+        this.intervalo_id = intervalo_id;
+    }
 }
