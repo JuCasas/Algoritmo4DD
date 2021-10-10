@@ -104,7 +104,7 @@ public class Algoritmo {
         kmeans = new Kmeans(cantMotos, cantAutos);
 
         // Obteniendo las calles bloqueadas
-        listaCallesBloqueadas = callesBloqueadasService.obtenerCallesBloqueadas();
+        listaCallesBloqueadas = obtenerCallesBloqueadas();
 
         // Obteniendo la lista de adyacencia
         obtenerListaAdyacente();
@@ -211,6 +211,18 @@ public class Algoritmo {
     }
 
     /**
+     * Convierte una fecha del tipo LocalDateTime a minutos del tipo int
+     * 
+     * @param ldt fecha del tipo LocalDateTime
+     * @return la fecha convertida a los minutos que pasaron desde el inicio del año
+     */
+    private Integer convertLocalDateTimeToMinutes(LocalDateTime ldt) {
+        LocalDateTime d1 = LocalDateTime.of(2021, Month.JANUARY, 1, 0, 0);
+
+        return (int) ChronoUnit.MINUTES.between(d1, ldt);
+    }
+
+    /**
      * Obtiene la lista de pedidos a partir de un archivo de texto
      * 
      * @return lista de pedidos
@@ -218,7 +230,7 @@ public class Algoritmo {
     public List<APedido> obtenerListaPedidos() {
         try {
             // Para lectura del archivo
-            String fileName = "src/main/resources/202209bloqueadas.txt";
+            String fileName = "src/main/resources/ventas202212.txt";
             final BufferedReader br = new BufferedReader(new FileReader(fileName));
 
             String strYearMonth = getOrdersDateFromName(fileName); // datos del nombre del archivo
@@ -244,9 +256,12 @@ public class Algoritmo {
 
                 APedido pedido = new APedido(id++, x, y, demand, remaining, orderDate);
                 listaPedidos.add(pedido);
-                System.out.println(day + " " + hour + " " + min + " " + x + " " + y + " " + demand + " " + remaining);
-                br.close();
+
+                // System.out.println(day + " " + hour + " " + min + " " + x + " " + y + " " +
+                // demand + " " + remaining);
             }
+
+            br.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -268,6 +283,70 @@ public class Algoritmo {
         // }
         // Collections.sort(respuesta);
         // return respuesta;
+    }
+
+    /**
+     * Obtiene la lista de calles bloqueadas a partir de un archivo de texto
+     * 
+     * @return lista de calles bloqueadas
+     */
+    public List<CallesBloqueadas> obtenerCallesBloqueadas() {
+        try {
+            String fileName = "src/main/resources/202209bloqueadas.txt";
+            final BufferedReader br = new BufferedReader(new FileReader(fileName));
+            String strYearMonth = getLockedNodesDateFromName(fileName);
+            String line;
+            int id = 1; // para el identificador de la calle bloqueada
+            List<CallesBloqueadas> listaCallesBloqueadas = new ArrayList<CallesBloqueadas>(); // para almacenar calles
+                                                                                              // bloqueadas
+
+            while ((line = br.readLine()) != null) {
+                final String[] tokens = line.trim().split(",");
+                final String[] plazo = tokens[0].trim().split("-");
+                final String[] inicio = plazo[0].trim().split(":");
+                final String[] fin = plazo[1].trim().split(":");
+                final int diaIni = Integer.parseInt(inicio[0]);
+                final int horaIni = Integer.parseInt(inicio[1]);
+                final int minIni = Integer.parseInt(inicio[2]);
+                final int diaFin = Integer.parseInt(fin[0]);
+                final int horaFin = Integer.parseInt(fin[1]);
+                final int minFin = Integer.parseInt(fin[2]);
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-d H:m:s");
+                String strDateIni = strYearMonth + "-" + diaIni + " " + horaIni + ":" + minIni + ":0";
+                String strDateFin = strYearMonth + "-" + diaFin + " " + horaFin + ":" + minFin + ":0";
+                LocalDateTime dateIni = LocalDateTime.parse(strDateIni, formatter);
+                LocalDateTime dateFin = LocalDateTime.parse(strDateFin, formatter);
+
+                final int len = tokens.length - 1;
+                final int cantNodosBloq = len / 2;
+                final String[] strCoords = Arrays.copyOfRange(tokens, 1, len + 1);
+                final int[] coords = new int[len];
+
+                // System.out.print(diaIni + " " + horaIni + " " + minIni + " " + diaFin + " " +
+                // horaFin + " " + minFin + " ");
+
+                for (int i = 0; i < len; i++) {
+                    coords[i] = Integer.parseInt(strCoords[i]);
+                    // System.out.print(strCoords[i] + " ");
+                }
+                // System.out.println();
+
+                CallesBloqueadas calleBloqueada = new CallesBloqueadas(id++, convertLocalDateTimeToMinutes(dateIni),
+                        convertLocalDateTimeToMinutes(dateFin));
+
+                // TODO Agregar nodos a la calle bloqueada
+                // Pueden ser los pares de coordenadas o un identificador único para mayor
+                // facilidad
+
+                listaCallesBloqueadas.add(calleBloqueada);
+            }
+
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return listaCallesBloqueadas;
     }
 
     /**
@@ -364,6 +443,9 @@ public class Algoritmo {
         return lista;
     }
 
+    /**
+     * Inicializa los clusters
+     */
     public List<Cluster> inicializarClusters(List<AVehiculo> vehiculos) {
         List<Cluster> lista = new ArrayList<Cluster>();
         for (AVehiculo vehiculo : vehiculos) {
@@ -397,6 +479,9 @@ public class Algoritmo {
         return lista;
     }
 
+    /**
+     * Obtiene las rutas
+     */
     public void obtenerRutas() {
         // calculamos el tiempo en minutos en que iniciamos a correr el algoritmo
         LocalDateTime tiempo = LocalDateTime.now();
