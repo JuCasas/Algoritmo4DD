@@ -19,6 +19,7 @@ import javax.transaction.Transactional;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
@@ -140,7 +141,39 @@ public class Algoritmo {
     }
 
     public List<APedido> obtenerListaPedidos(){
-        List<Pedido> pedidosList = pedidoService.getPedidosPorAtender();
+        try (final BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+            String strYearMonth = getOrdersDateFromName(fileName);
+            String line;
+            int id = 1;
+
+            while ((line = br.readLine()) != null) {
+                final String[] tokens = line.trim().split(",");
+                final String[] date = tokens[0].trim().split(":");
+                final int day = Integer.parseInt(date[0]);
+                final int hour = Integer.parseInt(date[1]);
+                final int min = Integer.parseInt(date[2]);
+                final int x = Integer.parseInt(tokens[1]);
+                final int y = Integer.parseInt(tokens[2]);
+                final int demand = Integer.parseInt(tokens[3]);
+                final int remaining = Integer.parseInt(tokens[4]);
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-d H:m:s");
+                String strDate = strYearMonth + "-" + day + " " + hour + ":" + min + ":0";
+                LocalDateTime orderDate = LocalDateTime.parse(strDate, formatter);
+
+                Node node = new Node(
+                        id++,
+                        x,
+                        y,
+                        demand,
+                        remaining,
+                        orderDate
+                );
+                nodes.add(node);
+
+                System.out.println(day + " " + hour + " " + min + " " + x + " " + y + " " + demand + " " + remaining);
+            }
+        }
+        //List<Pedido> pedidosList = pedidoService.getPedidosPorAtender();
         List<APedido> respuesta = new ArrayList< APedido >();
         for(Pedido pedido : pedidosList){
             int xP = ( pedido.getDireccion_id() - 1 ) % 71;
