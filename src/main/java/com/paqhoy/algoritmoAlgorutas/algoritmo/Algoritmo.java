@@ -82,7 +82,7 @@ public class Algoritmo {
         listaVehiculoTipo4 = initializeVehicleList(4);
 
         // Obteniendo la lista de pedidos
-        listaPedidos = obtenerListaPedidos();
+        obtenerListaPedidos();
 
         // Sin vehículos
         // if (listaVehiculoTipo1.size() == 0 && listaVehiculoTipo2.size() == 0 &&
@@ -97,14 +97,13 @@ public class Algoritmo {
         }
 
         // Obteniendo la cantidad de clusters
-        obtenerCantidadClusters();
+//        obtenerCantidadClusters();
 
-        // TODO CAMBIAR A SOLO AUTOS
         // Para agrupar en clusters
-        kmeans = new Kmeans(cantMotos, cantAutos);
+        kmeans = new Kmeans(cantVehiculoTipo1, cantVehiculoTipo2, cantVehiculoTipo3, cantVehiculoTipo4);
 
         // Obteniendo las calles bloqueadas
-        listaCallesBloqueadas = obtenerCallesBloqueadas();
+        obtenerCallesBloqueadas();
 
         // Obteniendo la lista de adyacencia
         obtenerListaAdyacente();
@@ -224,19 +223,17 @@ public class Algoritmo {
 
     /**
      * Obtiene la lista de pedidos a partir de un archivo de texto
-     * 
-     * @return lista de pedidos
      */
-    public List<APedido> obtenerListaPedidos() {
+    public void obtenerListaPedidos() {
         try {
             // Para lectura del archivo
             String fileName = "src/main/resources/ventas202212.txt";
             final BufferedReader br = new BufferedReader(new FileReader(fileName));
-
             String strYearMonth = getOrdersDateFromName(fileName); // datos del nombre del archivo
             String line; // línea del archivo
             int id = 1; // contador para identificador
-            List<APedido> listaPedidos = new ArrayList<APedido>(); // para almacenar pedidos
+            listaPedidos = new ArrayList<APedido>(); // para almacenar pedidos
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-d H:m:s");
 
             // Leyendo datos del archivo
 
@@ -250,7 +247,6 @@ public class Algoritmo {
                 final int y = Integer.parseInt(tokens[2]);
                 final int demand = Integer.parseInt(tokens[3]);
                 final int remaining = Integer.parseInt(tokens[4]);
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-d H:m:s");
                 String strDate = strYearMonth + "-" + day + " " + hour + ":" + min + ":0";
                 LocalDateTime orderDate = LocalDateTime.parse(strDate, formatter);
 
@@ -265,8 +261,6 @@ public class Algoritmo {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        return listaPedidos;
 
         // List<Pedido> pedidosList = pedidoService.getPedidosPorAtender();
         // List<APedido> respuesta = new ArrayList<APedido>();
@@ -287,18 +281,16 @@ public class Algoritmo {
 
     /**
      * Obtiene la lista de calles bloqueadas a partir de un archivo de texto
-     * 
-     * @return lista de calles bloqueadas
      */
-    public List<CallesBloqueadas> obtenerCallesBloqueadas() {
+    public void obtenerCallesBloqueadas() {
         try {
             String fileName = "src/main/resources/202209bloqueadas.txt";
             final BufferedReader br = new BufferedReader(new FileReader(fileName));
             String strYearMonth = getLockedNodesDateFromName(fileName);
             String line;
             int id = 1; // para el identificador de la calle bloqueada
-            List<CallesBloqueadas> listaCallesBloqueadas = new ArrayList<CallesBloqueadas>(); // para almacenar calles
-                                                                                              // bloqueadas
+            listaCallesBloqueadas = new ArrayList<CallesBloqueadas>(); // para calles bloqueadas
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-d H:m:s");
 
             while ((line = br.readLine()) != null) {
                 final String[] tokens = line.trim().split(",");
@@ -311,7 +303,6 @@ public class Algoritmo {
                 final int diaFin = Integer.parseInt(fin[0]);
                 final int horaFin = Integer.parseInt(fin[1]);
                 final int minFin = Integer.parseInt(fin[2]);
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-d H:m:s");
                 String strDateIni = strYearMonth + "-" + diaIni + " " + horaIni + ":" + minIni + ":0";
                 String strDateFin = strYearMonth + "-" + diaFin + " " + horaFin + ":" + minFin + ":0";
                 LocalDateTime dateIni = LocalDateTime.parse(strDateIni, formatter);
@@ -335,9 +326,9 @@ public class Algoritmo {
 
                 // Agregando el identificador del nodo a la calle bloqueada
                 for (int i = 0; i < len; i += 2) {
-                    int x = i;
-                    int y = i + 1;
-                    calleBloqueada.addNode(coords[x] + 71 * coords[y] + 1);
+                    int x = coords[i];
+                    int y = coords[i + 1];
+                    calleBloqueada.addNode(x + 71 * y + 1);
                 }
 
                 listaCallesBloqueadas.add(calleBloqueada);
@@ -347,8 +338,6 @@ public class Algoritmo {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        return listaCallesBloqueadas;
     }
 
     /**
@@ -390,7 +379,7 @@ public class Algoritmo {
         Scanner sc = new Scanner(grafo);
 
         dijkstraAlgorithm = new Dijkstra(Configuraciones.V, listaCallesBloqueadas);
-        for (int i = 0; i < Configuraciones.E; ++i) {
+        for (int i = 0; i < Configuraciones.E; i++) {
             origen = sc.nextInt() + 1;
             destino = sc.nextInt() + 1;
             dijkstraAlgorithm.addEdge(origen, destino);
