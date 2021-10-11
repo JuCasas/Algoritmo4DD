@@ -20,6 +20,7 @@ public class AVehiculo {
     private Integer capacidad;
     private Double velocidad;
     private Double peso;
+    //TODO CARGA DEL GLP ACTUAL
 
     // id
     public Integer getId() {
