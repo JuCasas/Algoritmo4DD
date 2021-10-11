@@ -514,7 +514,7 @@ public class Simulacion {
 
     public void ejecutarAlgoritmo() {
         obtenerCantidadClusters();
-        kmeans = new Kmeans(cantMotos, cantAutos);
+//        kmeans = new Kmeans(cantMotos, cantAutos);
         obtenerPedidosClusterizados();
         obtenerRutas();
         asignarRutas();

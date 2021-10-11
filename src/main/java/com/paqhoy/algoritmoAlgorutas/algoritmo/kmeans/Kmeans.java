@@ -14,13 +14,25 @@ public class Kmeans {
     // and higher error
     static final Double PRECISION = 0.0;
     static final Double FACTORTIEMPO = 1.5;
+
+    public Integer cantVehiculosTipo1;
+    public Integer cantVehiculosTipo2;
+    public Integer cantVehiculosTipo3;
+    public Integer cantVehiculosTipo4;
+
+    // TODO QUITAR ESTO
     public Integer cantMotos;
     public Integer cantAutos;
 
-    public Kmeans(Integer cantMotos, Integer cantAutos) {
-        // TODO CAMBIAR ESTO
-        this.cantAutos = cantAutos;
-        this.cantMotos = cantMotos;
+    public Kmeans(Integer cant1, Integer cant2, Integer cant3, Integer cant4) {
+        this.cantVehiculosTipo1 = cant1;
+        this.cantVehiculosTipo2 = cant2;
+        this.cantVehiculosTipo3 = cant3;
+        this.cantVehiculosTipo4 = cant4;
+
+        // TODO QUITAR ESTO
+//        this.cantAutos = cantAutos;
+//        this.cantMotos = cantMotos;
     }
 
     /* K-Means++ implementation, initializes K centroids from data */
@@ -68,8 +80,17 @@ public class Kmeans {
 
         // TODO REVISAR Y MODIFICAR
         double totalsse = 0;
+        int totalVehiculosTipo1 = 0;
+        int totalVehiculosTipo2 = 0;
+        int totalVehiculosTipo3 = 0;
+        int totalVehiculosTipo4 = 0;
         int totalMotos = 0;
         int totalAutos = 0;
+
+        List<APedido> listaVehiculosTipo1 = new ArrayList<>();
+        List<APedido> listaVehiculosTipo2 = new ArrayList<>();
+        List<APedido> listaVehiculosTipo3 = new ArrayList<>();
+        List<APedido> listaVehiculosTipo4 = new ArrayList<>();
         List<APedido> listaMotos = new ArrayList<>();
         List<APedido> listaAuto = new ArrayList<>();
         int cont = 0;
@@ -80,26 +101,74 @@ public class Kmeans {
                 continue;
             }
             cluster.firstPedido.idCluster = cont;
-            if (cluster.vehiculo.getTipoId() == 2)
-                listaMotos.add(cluster.firstPedido);
-            if (cluster.vehiculo.getTipoId() == 1)
-                listaAuto.add(cluster.firstPedido);
+
+            if (cluster.vehiculo.getTipoId() == 1) {
+                listaVehiculosTipo1.add(cluster.firstPedido);
+            }
+            if (cluster.vehiculo.getTipoId() == 2) {
+                listaVehiculosTipo2.add(cluster.firstPedido);
+            }
+            if (cluster.vehiculo.getTipoId() == 3) {
+                listaVehiculosTipo3.add(cluster.firstPedido);
+            }
+            if (cluster.vehiculo.getTipoId() == 4) {
+                listaVehiculosTipo4.add(cluster.firstPedido);
+            }
+
+//            if (cluster.vehiculo.getTipoId() == 2)
+//                listaMotos.add(cluster.firstPedido);
+//            if (cluster.vehiculo.getTipoId() == 1)
+//                listaAuto.add(cluster.firstPedido);
+
             cont++;
         }
-        Collections.sort(listaMotos);
-        Collections.sort(listaAuto);
-        for (APedido pedido : listaMotos) {
-            if (totalMotos < cantMotos) {
+
+        Collections.sort(listaVehiculosTipo1);
+        Collections.sort(listaVehiculosTipo2);
+        Collections.sort(listaVehiculosTipo3);
+        Collections.sort(listaVehiculosTipo4);
+
+//        Collections.sort(listaMotos);
+//        Collections.sort(listaAuto);
+
+        for (APedido pedido : listaVehiculosTipo1) {
+            if (totalVehiculosTipo1 < cantVehiculosTipo1) {
                 totalsse = totalsse + SSE(clusters.get(pedido.idCluster));
-                totalMotos++;
+                totalVehiculosTipo1++;
             }
         }
-        for (APedido pedido : listaAuto) {
-            if (totalAutos < cantAutos) {
+        for (APedido pedido : listaVehiculosTipo2) {
+            if (totalVehiculosTipo2 < cantVehiculosTipo2) {
                 totalsse = totalsse + SSE(clusters.get(pedido.idCluster));
-                totalAutos++;
+                totalVehiculosTipo2++;
             }
         }
+        for (APedido pedido : listaVehiculosTipo3) {
+            if (totalVehiculosTipo3 < cantVehiculosTipo3) {
+                totalsse = totalsse + SSE(clusters.get(pedido.idCluster));
+                totalVehiculosTipo3++;
+            }
+        }
+        for (APedido pedido : listaVehiculosTipo4) {
+            if (totalVehiculosTipo4 < cantVehiculosTipo4) {
+                totalsse = totalsse + SSE(clusters.get(pedido.idCluster));
+                totalVehiculosTipo4++;
+            }
+        }
+
+        // TODO QUITAR ESTO
+//        for (APedido pedido : listaMotos) {
+//            if (totalMotos < cantMotos) {
+//                totalsse = totalsse + SSE(clusters.get(pedido.idCluster));
+//                totalMotos++;
+//            }
+//        }
+//        for (APedido pedido : listaAuto) {
+//            if (totalAutos < cantAutos) {
+//                totalsse = totalsse + SSE(clusters.get(pedido.idCluster));
+//                totalAutos++;
+//            }
+//        }
         return totalsse;
     }
 
