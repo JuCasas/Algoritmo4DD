@@ -97,7 +97,7 @@ public class Algoritmo {
         }
 
         // Obteniendo la cantidad de clusters
-//        obtenerCantidadClusters();
+        obtenerCantidadClusters();
 
         // Para agrupar en clusters
         kmeans = new Kmeans(cantVehiculoTipo1, cantVehiculoTipo2, cantVehiculoTipo3, cantVehiculoTipo4);
@@ -171,7 +171,7 @@ public class Algoritmo {
 
         obtenerPedidosClusterizados();
         obtenerRutas();
-        asignarRutas();
+//        asignarRutas();
 
         tiempo2 = LocalDateTime.now();
 
@@ -359,15 +359,24 @@ public class Algoritmo {
 
         // TODO A: 2.5Tn B: 2Tn C: 1.5Tn D: 1Tn
         // TODO ENTENDER
-        int k = (int) (0.9 * (cantidadProductos / (cantMotos * 4 + cantAutos * 25)));
+
+        int k = (int) (0.9 * (cantidadProductos / (cantVehiculoTipo1 * 2.5 + cantVehiculoTipo2 * 2.0 +
+                    cantVehiculoTipo3 * 1.5 + cantVehiculoTipo4 * 1.0)));
+
+//        int k = (int) (0.9 * (cantidadProductos / (cantMotos * 4 + cantAutos * 25)));
         if (k > 10)
             k = 10;
         if (k < 3)
             k = 3;
 
         // TODO ENTENDER
-        cantClusterMotos = cantMotos * k;
-        cantClusterAutos = cantAutos * k;
+
+        cantClusterVehiculoTipo1 = cantVehiculoTipo1 * k;
+        cantClusterVehiculoTipo2 = cantVehiculoTipo2 * k;
+        cantClusterVehiculoTipo3 = cantVehiculoTipo3 * k;
+        cantClusterVehiculoTipo4 = cantVehiculoTipo4 * k;
+//        cantClusterMotos = cantMotos * k;
+//        cantClusterAutos = cantAutos * k;
     }
 
     /**
@@ -392,7 +401,9 @@ public class Algoritmo {
      * Distribuye los pedidos en clusters
      */
     public void obtenerPedidosClusterizados() {
-        int cantClusters = cantClusterMotos + cantClusterAutos;
+        int cantClusters = cantClusterVehiculoTipo1 + cantClusterVehiculoTipo2 + cantClusterVehiculoTipo3 + cantClusterVehiculoTipo4;
+
+//        int cantClusters = cantClusterMotos + cantClusterAutos;
         List<AVehiculo> vehiculos = inicializarVehiculos();
 
         // inicializar clusters
@@ -413,24 +424,64 @@ public class Algoritmo {
     // FALTA CAMBIAR A SOLO AUTOS
     public List<AVehiculo> inicializarVehiculos() {
         List<AVehiculo> lista = new ArrayList<>();
-        for (int i = 0; i < cantClusterMotos; i++) {
+
+        for (int i = 0; i < cantClusterVehiculoTipo1; i++) {
             AVehiculo vehiculo = new AVehiculo();
-            vehiculo.setTipo("Moto");
-            vehiculo.setCapacidad(4);
-            vehiculo.setPeso(3.0);
-            vehiculo.setVelocidad(60.00);
-            vehiculo.setTipoId(2);
-            lista.add(vehiculo);
-        }
-        for (int i = 0; i < cantClusterAutos; i++) {
-            AVehiculo vehiculo = new AVehiculo();
-            vehiculo.setTipo("Auto");
+            vehiculo.setTipo("Tipo TA");
             vehiculo.setCapacidad(25);
-            vehiculo.setPeso(5.0);
-            vehiculo.setVelocidad(30.00);
+            vehiculo.setPeso(2.5);
+            vehiculo.setVelocidad(50.0);
             vehiculo.setTipoId(1);
             lista.add(vehiculo);
         }
+        for (int i = 0; i < cantClusterVehiculoTipo2; i++) {
+            AVehiculo vehiculo = new AVehiculo();
+            vehiculo.setTipo("Tipo TB");
+            vehiculo.setCapacidad(20);
+            vehiculo.setPeso(2.0);
+            vehiculo.setVelocidad(50.0);
+            vehiculo.setTipoId(2);
+            lista.add(vehiculo);
+        }
+        for (int i = 0; i < cantClusterVehiculoTipo3; i++) {
+            AVehiculo vehiculo = new AVehiculo();
+            vehiculo.setTipo("Tipo TC");
+            vehiculo.setCapacidad(15);
+            vehiculo.setPeso(1.5);
+            vehiculo.setVelocidad(50.0);
+            vehiculo.setTipoId(3);
+            lista.add(vehiculo);
+        }
+        for (int i = 0; i < cantClusterVehiculoTipo4; i++) {
+            AVehiculo vehiculo = new AVehiculo();
+            vehiculo.setTipo("Tipo TD");
+            vehiculo.setCapacidad(10);
+            vehiculo.setPeso(1.0);
+            vehiculo.setVelocidad(50.0);
+            vehiculo.setTipoId(4);
+            lista.add(vehiculo);
+        }
+
+        // TODO QUITAR ESTO
+//        for (int i = 0; i < cantClusterMotos; i++) {
+//            AVehiculo vehiculo = new AVehiculo();
+//            vehiculo.setTipo("Moto");
+//            vehiculo.setCapacidad(4);
+//            vehiculo.setPeso(3.0);
+//            vehiculo.setVelocidad(60.00);
+//            vehiculo.setTipoId(2);
+//            lista.add(vehiculo);
+//        }
+//        for (int i = 0; i < cantClusterAutos; i++) {
+//            AVehiculo vehiculo = new AVehiculo();
+//            vehiculo.setTipo("Auto");
+//            vehiculo.setCapacidad(25);
+//            vehiculo.setPeso(5.0);
+//            vehiculo.setVelocidad(30.00);
+//            vehiculo.setTipoId(1);
+//            lista.add(vehiculo);
+//        }
+
         return lista;
     }
 
