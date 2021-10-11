@@ -318,7 +318,6 @@ public class Algoritmo {
                 LocalDateTime dateFin = LocalDateTime.parse(strDateFin, formatter);
 
                 final int len = tokens.length - 1;
-                final int cantNodosBloq = len / 2;
                 final String[] strCoords = Arrays.copyOfRange(tokens, 1, len + 1);
                 final int[] coords = new int[len];
 
@@ -326,7 +325,7 @@ public class Algoritmo {
                 // horaFin + " " + minFin + " ");
 
                 for (int i = 0; i < len; i++) {
-                    coords[i] = Integer.parseInt(strCoords[i]);
+                    coords[i] = Integer.parseInt(strCoords[i]); // pasando a enteros
                     // System.out.print(strCoords[i] + " ");
                 }
                 // System.out.println();
@@ -334,9 +333,12 @@ public class Algoritmo {
                 CallesBloqueadas calleBloqueada = new CallesBloqueadas(id++, convertLocalDateTimeToMinutes(dateIni),
                         convertLocalDateTimeToMinutes(dateFin));
 
-                // TODO Agregar nodos a la calle bloqueada
-                // Pueden ser los pares de coordenadas o un identificador único para mayor
-                // facilidad
+                // Agregando el identificador del nodo a la calle bloqueada
+                for (int i = 0; i < len; i += 2) {
+                    int x = i;
+                    int y = i + 1;
+                    calleBloqueada.addNode(coords[x] + 71 * coords[y] + 1);
+                }
 
                 listaCallesBloqueadas.add(calleBloqueada);
             }
