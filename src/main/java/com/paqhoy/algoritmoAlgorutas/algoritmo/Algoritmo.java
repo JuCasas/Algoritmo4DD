@@ -85,11 +85,10 @@ public class Algoritmo {
         obtenerListaPedidos();
 
         // Sin vehículos
-        // if (listaVehiculoTipo1.size() == 0 && listaVehiculoTipo2.size() == 0 &&
-        // listaVehiculoTipo3.size() == 0
-        // && listaVehiculoTipo4.size() == 0) {
-        // return "No hay vehículos disponibles para las rutas";
-        // }
+        if (listaVehiculoTipo1.size() == 0 && listaVehiculoTipo2.size() == 0 &&
+            listaVehiculoTipo3.size() == 0 && listaVehiculoTipo4.size() == 0) {
+            return "No hay vehículos disponibles para las rutas";
+        }
 
         // Sin pedidos
         if (listaPedidos.size() == 0) {
@@ -252,31 +251,12 @@ public class Algoritmo {
 
                 APedido pedido = new APedido(id++, x, y, demand, remaining, orderDate);
                 listaPedidos.add(pedido);
-
-                // System.out.println(day + " " + hour + " " + min + " " + x + " " + y + " " +
-                // demand + " " + remaining);
             }
 
             br.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        // List<Pedido> pedidosList = pedidoService.getPedidosPorAtender();
-        // List<APedido> respuesta = new ArrayList<APedido>();
-        // for (Pedido pedido : pedidosList) {
-        // int xP = (pedido.getDireccion_id() - 1) % 71;
-        // int yP = (pedido.getDireccion_id() - 1) / 71;
-        // // CAMBIAR
-        // int minutos = (int) ChronoUnit.MINUTES.between(LocalDateTime.now(),
-        // pedido.getFecha_limite());
-        // cantidadProductos += pedido.getCantidad();
-        // APedido apedido = new APedido(pedido.getId(), xP, yP, pedido.getCantidad(),
-        // minutos);
-        // respuesta.add(apedido);
-        // }
-        // Collections.sort(respuesta);
-        // return respuesta;
     }
 
     /**
@@ -312,14 +292,9 @@ public class Algoritmo {
                 final String[] strCoords = Arrays.copyOfRange(tokens, 1, len + 1);
                 final int[] coords = new int[len];
 
-                // System.out.print(diaIni + " " + horaIni + " " + minIni + " " + diaFin + " " +
-                // horaFin + " " + minFin + " ");
-
                 for (int i = 0; i < len; i++) {
                     coords[i] = Integer.parseInt(strCoords[i]); // pasando a enteros
-                    // System.out.print(strCoords[i] + " ");
                 }
-                // System.out.println();
 
                 CallesBloqueadas calleBloqueada = new CallesBloqueadas(id++, convertLocalDateTimeToMinutes(dateIni),
                         convertLocalDateTimeToMinutes(dateFin));
@@ -344,43 +319,30 @@ public class Algoritmo {
      * Obtiene la cantidad de clusters necesarios para el algoritmo
      */
     public void obtenerCantidadClusters() {
-        // cantMotos = listaMotos.size();
-        // cantAutos = listaAutos.size();
-
         cantVehiculoTipo1 = listaVehiculoTipo1.size();
         cantVehiculoTipo2 = listaVehiculoTipo2.size();
         cantVehiculoTipo3 = listaVehiculoTipo3.size();
         cantVehiculoTipo4 = listaVehiculoTipo4.size();
 
-        // System.out.println(listaChoferesMoto.size() + " " +
-        // listaChoferesAuto.size());
         System.out.println(listaVehiculoTipo1.size() + " " + listaVehiculoTipo2.size() + " " + listaVehiculoTipo3.size()
                 + " " + listaVehiculoTipo4.size());
-
-        // TODO A: 2.5Tn B: 2Tn C: 1.5Tn D: 1Tn
-        // TODO ENTENDER
 
         int k = (int) (0.9 * (cantidadProductos / (cantVehiculoTipo1 * 2.5 + cantVehiculoTipo2 * 2.0 +
                     cantVehiculoTipo3 * 1.5 + cantVehiculoTipo4 * 1.0)));
 
-//        int k = (int) (0.9 * (cantidadProductos / (cantMotos * 4 + cantAutos * 25)));
         if (k > 10)
             k = 10;
         if (k < 3)
             k = 3;
 
-        // TODO ENTENDER
-
         cantClusterVehiculoTipo1 = cantVehiculoTipo1 * k;
         cantClusterVehiculoTipo2 = cantVehiculoTipo2 * k;
         cantClusterVehiculoTipo3 = cantVehiculoTipo3 * k;
         cantClusterVehiculoTipo4 = cantVehiculoTipo4 * k;
-//        cantClusterMotos = cantMotos * k;
-//        cantClusterAutos = cantAutos * k;
     }
 
     /**
-     * Obtiene la lista de adyancencia a partir de un archivo de texto
+     * Obtiene la lista de adyacencia a partir de un archivo de texto
      */
     public void obtenerListaAdyacente() {
         int origen, destino;
@@ -403,14 +365,13 @@ public class Algoritmo {
     public void obtenerPedidosClusterizados() {
         int cantClusters = cantClusterVehiculoTipo1 + cantClusterVehiculoTipo2 + cantClusterVehiculoTipo3 + cantClusterVehiculoTipo4;
 
-//        int cantClusters = cantClusterMotos + cantClusterAutos;
         List<AVehiculo> vehiculos = inicializarVehiculos();
 
         // inicializar clusters
         List<Cluster> clustersList = inicializarClusters(vehiculos);
         List<Cluster> clustersAns = inicializarClusters(vehiculos);
 
-        // Clusterizacion
+        // clusterización
         clusterResult = kmeans.kmeans(listaPedidos, clustersList, cantClusters, clustersAns);
         Double SSE = kmeans.getOptimo(listaPedidos, clustersAns, cantClusters);
         System.out.println("------------------------------------------------------");
@@ -420,8 +381,6 @@ public class Algoritmo {
         System.out.println();
     }
 
-    // FALTA ENTENDER
-    // FALTA CAMBIAR A SOLO AUTOS
     public List<AVehiculo> inicializarVehiculos() {
         List<AVehiculo> lista = new ArrayList<>();
 
@@ -461,26 +420,6 @@ public class Algoritmo {
             vehiculo.setTipoId(4);
             lista.add(vehiculo);
         }
-
-        // TODO QUITAR ESTO
-//        for (int i = 0; i < cantClusterMotos; i++) {
-//            AVehiculo vehiculo = new AVehiculo();
-//            vehiculo.setTipo("Moto");
-//            vehiculo.setCapacidad(4);
-//            vehiculo.setPeso(3.0);
-//            vehiculo.setVelocidad(60.00);
-//            vehiculo.setTipoId(2);
-//            lista.add(vehiculo);
-//        }
-//        for (int i = 0; i < cantClusterAutos; i++) {
-//            AVehiculo vehiculo = new AVehiculo();
-//            vehiculo.setTipo("Auto");
-//            vehiculo.setCapacidad(25);
-//            vehiculo.setPeso(5.0);
-//            vehiculo.setVelocidad(30.00);
-//            vehiculo.setTipoId(1);
-//            lista.add(vehiculo);
-//        }
 
         return lista;
     }
